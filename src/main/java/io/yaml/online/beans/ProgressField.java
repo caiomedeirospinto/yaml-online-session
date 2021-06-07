@@ -12,13 +12,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @RegisterForReflection
-@EqualsAndHashCode
 @Entity
 @Table(name = "progress_fields")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,7 +26,7 @@ import lombok.Setter;
   "firstState",
   "secondState"
 })
-public class ProgressField {
+public class ProgressField extends PanacheEntity {
   
   @Column(name = "field")
   @JsonProperty("field")

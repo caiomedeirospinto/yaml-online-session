@@ -6,8 +6,10 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.yaml.online.Message;
 
+@RegisterForReflection
 public class MessageEncoder implements Encoder.Text<Message> {
 
   private static Jsonb jsonb = JsonbBuilder.create();

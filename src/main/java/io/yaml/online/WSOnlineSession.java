@@ -19,6 +19,8 @@ import io.yaml.online.decoders.MessageDecoder;
 import io.yaml.online.encoders.MessageEncoder;
 import io.yaml.online.repositories.OnlineSessionRepository;
 
+import org.jboss.logging.Logger;
+
 import javax.websocket.Session;
 
 @RegisterForReflection
@@ -31,22 +33,28 @@ public class WSOnlineSession {
 
   Map<String, Session> sessions = new ConcurrentHashMap<>(); 
 
+  private static final Logger logger = Logger.getLogger(WSOnlineSession.class);
+
   @OnOpen
   public void onOpen(Session session, @PathParam("id") String sessionId, @PathParam("username") String username) {
     sessions.put(sessionId+username, session);
     OnlineSession onlineSession = repository.findById(Long.parseLong(sessionId));
+    logger.debug("User connected " + username + " into session " + sessionId);
     message(session, new Message("init", onlineSession.toJson(), new Date()));
     broadcast(new Message("joined", username, new Date()));
   }
 
   @OnClose
   public void onClose(Session session, @PathParam("id") String sessionId, @PathParam("username") String username) {
+    logger.debug("User disconnected " + username + " from session " + sessionId);
     sessions.remove(sessionId+username);
     broadcast(new Message("left", username, new Date()));
   }
 
   @OnError
   public void onError(Session session, @PathParam("id") String sessionId, @PathParam("username") String username, Throwable throwable) {
+    logger.error("User disconnected " + username + " from session " + sessionId + " by error: " + throwable.getMessage());
+    throwable.printStackTrace();
     sessions.remove(sessionId+username);
     broadcast(new Message("left-on-error", username, new Date()));
   }
@@ -58,6 +66,7 @@ public class WSOnlineSession {
     repository.persist(onlineSession);
     repository.flush();
     message.setDate(new Date());
+    logger.debug("Item updated by " + username + " from session " + sessionId + ": " + message.getValue());
     broadcast(message);
   }
 
@@ -65,7 +74,7 @@ public class WSOnlineSession {
     sessions.values().forEach(s -> {
       s.getAsyncRemote().sendObject(message, result ->  {
         if (result.getException() != null) {
-          System.out.println("Unable to send message: " + result.getException());
+          logger.error("Unable to send message: " + result.getException());
         }
       });
     });
@@ -74,7 +83,7 @@ public class WSOnlineSession {
   private void message(Session session, Message message) {
     session.getAsyncRemote().sendObject(message, result ->  {
       if (result.getException() != null) {
-        System.out.println("Unable to send message: " + result.getException());
+        logger.error("Unable to send message: " + result.getException());
       }
     });
   }
