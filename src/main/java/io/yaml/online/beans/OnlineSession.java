@@ -1,0 +1,56 @@
+package io.yaml.online.beans;
+
+import java.util.List;
+
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@RegisterForReflection
+@EqualsAndHashCode
+@Entity
+@Table(name = "online_sessions")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+  "id",
+  "usersConnected",
+  "procesar"
+})
+public class OnlineSession {
+
+  private static Jsonb jsonb = JsonbBuilder.create();
+
+  @Id
+  @Column(name = "id")
+  @JsonProperty("id")
+  @Getter @Setter
+  private Long id;
+
+  @Column(name = "usersConnected")
+  @JsonProperty("usersConnected")
+  @Getter @Setter
+  private List<String> usersConnected;
+
+  @OneToOne(mappedBy = "onlineSession", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonProperty("procesar")
+  @Getter @Setter
+  private Procesar procesar;
+
+  public String toJson() {
+    return jsonb.toJson(this);
+  }
+}
