@@ -33,18 +33,18 @@ public class ProgressField extends PanacheEntity {
   @Getter @Setter
   private String field;
   
-  @Column(name = "firstState")
+  @Column(name = "first_state")
   @JsonProperty("firstState")
   @Getter @Setter
   private String firstState;
   
-  @Column(name = "secondState")
+  @Column(name = "second_state")
   @JsonProperty("secondState")
   @Getter @Setter
   private String secondState;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name="procesarId", nullable = false)
+  @JoinColumn(name="procesar_id", nullable = false)
   @JsonbTransient
   @Getter @Setter
   private Procesar procesar;

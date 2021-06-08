@@ -20,4 +20,6 @@ public class Message extends Encoder {
 
   @Getter @Setter
   private Date date;
+
+  public Message() {}
 }

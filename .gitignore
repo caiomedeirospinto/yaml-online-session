@@ -23,6 +23,7 @@ nb-configuration.xml
 # Visual Studio Code
 .vscode
 .factorypath
+yaml-online-session*.jar
 
 # OSX
 .DS_Store

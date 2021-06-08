@@ -27,18 +27,18 @@ import lombok.Setter;
 })
 public class CustomField extends PanacheEntity {
 
-  @Column(name = "displayName")
+  @Column(name = "display_name")
   @JsonProperty("displayName")
   @Getter @Setter
   private String displayName;
 
-  @Column(name = "key")
+  @Column(name = "key_field")
   @JsonProperty("key")
   @Getter @Setter
   private String key;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "procesarId", nullable = false)
+  @JoinColumn(name = "procesar_id", nullable = false)
   @JsonbTransient
   @Getter @Setter
   private Procesar procesar;
