@@ -11,6 +11,8 @@ if [ ! "$(docker ps -a | grep mariadb)" ]; then
     -e MARIADB_DATABASE="$DATABASE_NAME" \
     -e MARIADB_USER="$DATABASE_USER" \
     -e MARIADB_PASSWORD="$DATABASE_PASS" mariadb:latest;
+else
+  docker start mariadb;
 fi
 
 ./mvnw compile quarkus:dev
