@@ -3,6 +3,7 @@ package io.yaml.online.beans;
 import java.util.List;
 
 import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ import lombok.Setter;
 })
 public class Procesar extends PanacheEntity {
 
-  @Lob
+  @Lob @Basic(fetch = FetchType.LAZY)
   @Column(name = "items", columnDefinition = "TEXT")
   @JsonProperty("items")
   @Getter @Setter
