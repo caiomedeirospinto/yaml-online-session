@@ -35,7 +35,7 @@ import lombok.Setter;
 })
 public class Procesar extends PanacheEntity {
 
-  @Column(name = "items")
+  @Column(name = "items", length = 10000000)
   @JsonProperty("items")
   @Getter @Setter
   private String items;
